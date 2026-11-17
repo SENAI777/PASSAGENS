@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Início')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <h1>Sistema de Reservas de Voo</h1>
+    <p>Escolha um cadastro:</p>
+
+    <div class="cards">
+        <a class="card" th:href="@{/passageiros}">
+            <h2>Passageiros</h2>
+            <p>Nome, CPF, idade e e-mail</p>
+        </a>
+        <a class="card" th:href="@{/voos}">
+            <h2>Voos</h2>
+            <p>Origem, destino, horário e avião</p>
+        </a>
+        <a class="card" th:href="@{/reservas}">
+            <h2>Reservas</h2>
+            <p>Passageiro + voo, tarifa e bagagens</p>
+        </a>
+    </div>
+</main>
+</body>
+</html>

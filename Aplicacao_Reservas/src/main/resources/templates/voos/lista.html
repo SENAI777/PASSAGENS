@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Voos')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <div class="topo">
+        <h1>Voos</h1>
+        <a class="btn" th:href="@{/voos/novo}">+ Novo voo</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Código</th>
+            <th>Origem</th>
+            <th>Destino</th>
+            <th>Horário</th>
+            <th>Modelo do avião</th>
+            <th>Reservas</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="v : ${voos}">
+            <td th:text="${v.codVoo}"></td>
+            <td th:text="${v.origem}"></td>
+            <td th:text="${v.destino}"></td>
+            <td th:text="${v.horario != null} ? ${#temporals.format(v.horario, 'dd/MM/yyyy HH:mm')} : ''"></td>
+            <td th:text="${v.modeloAviao}"></td>
+            <td th:text="${qtdReservas[v.codVoo]}"></td>
+            <td class="acoes">
+                <a class="btn pequeno" th:href="@{/voos/editar/{id}(id=${v.codVoo})}">Editar</a>
+                <form th:action="@{/voos/excluir/{id}(id=${v.codVoo})}" method="post"
+                      onsubmit="return confirm('Excluir este voo?')">
+                    <button class="btn pequeno perigo" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(voos)}">
+            <td colspan="7" class="vazio">Nenhum voo cadastrado.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

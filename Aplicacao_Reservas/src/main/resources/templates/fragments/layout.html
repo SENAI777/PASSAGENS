@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' | Reservas de Voo'">Reservas de Voo</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:fragment="menu">
+    <nav class="menu">
+        <a class="logo" th:href="@{/}">✈ Reservas de Voo</a>
+        <a th:href="@{/passageiros}">Passageiros</a>
+        <a th:href="@{/voos}">Voos</a>
+        <a th:href="@{/reservas}">Reservas</a>
+    </nav>
+</header>
+
+<div th:fragment="mensagens">
+    <div class="alerta sucesso" th:if="${sucesso}" th:text="${sucesso}"></div>
+    <div class="alerta erro" th:if="${erro}" th:text="${erro}"></div>
+</div>
+
+</body>
+</html>

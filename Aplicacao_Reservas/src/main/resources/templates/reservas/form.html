@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reserva')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <h1 th:text="${reserva.codReserva == null} ? 'Nova reserva' : 'Editar reserva'"></h1>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <form class="formulario" th:action="@{/reservas/salvar}" th:object="${reserva}" method="post">
+        <input type="hidden" th:field="*{codReserva}">
+
+        <label>Passageiro
+            <select th:field="*{passageiro.codPassageiro}" required>
+                <option value="">-- selecione --</option>
+                <option th:each="p : ${passageiros}"
+                        th:value="${p.codPassageiro}"
+                        th:text="${p.nome} + ' (CPF ' + ${p.cpf} + ')'"></option>
+            </select>
+        </label>
+
+        <label>Voo
+            <select th:field="*{voo.codVoo}" required>
+                <option value="">-- selecione --</option>
+                <option th:each="v : ${voos}"
+                        th:value="${v.codVoo}"
+                        th:text="${v.descricao} + ' - ' + ${v.horario != null ? #temporals.format(v.horario, 'dd/MM/yyyy HH:mm') : ''}"></option>
+            </select>
+        </label>
+
+        <label>Tarifa (R$)
+            <input type="number" th:field="*{tarifa}" step="0.01" min="0" required>
+        </label>
+
+        <label>Quantidade de bagagens
+            <input type="number" th:field="*{qtdBagagens}" min="0" required>
+        </label>
+
+        <div class="botoes">
+            <button class="btn" type="submit">Salvar</button>
+            <a class="btn secundario" th:href="@{/reservas}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

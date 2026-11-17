@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Passageiros')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <div class="topo">
+        <h1>Passageiros</h1>
+        <a class="btn" th:href="@{/passageiros/novo}">+ Novo passageiro</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Idade</th>
+            <th>E-mail</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${passageiros}">
+            <td th:text="${p.codPassageiro}"></td>
+            <td th:text="${p.nome}"></td>
+            <td th:text="${p.cpf}"></td>
+            <td th:text="${p.idade}"></td>
+            <td th:text="${p.email}"></td>
+            <td class="acoes">
+                <a class="btn pequeno" th:href="@{/passageiros/editar/{id}(id=${p.codPassageiro})}">Editar</a>
+                <form th:action="@{/passageiros/excluir/{id}(id=${p.codPassageiro})}" method="post"
+                      onsubmit="return confirm('Excluir este passageiro?')">
+                    <button class="btn pequeno perigo" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(passageiros)}">
+            <td colspan="6" class="vazio">Nenhum passageiro cadastrado.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

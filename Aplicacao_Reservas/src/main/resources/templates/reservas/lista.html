@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reservas')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <div class="topo">
+        <h1>Reservas</h1>
+        <a class="btn" th:href="@{/reservas/novo}">+ Nova reserva</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Código</th>
+            <th>Localizador</th>
+            <th>Passageiro</th>
+            <th>Voo</th>
+            <th>Horário</th>
+            <th>Tarifa</th>
+            <th>Bagagens</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${reservas}">
+            <td th:text="${r.codReserva}"></td>
+            <td><strong th:text="${r.localizador}"></strong></td>
+            <td th:text="${r.passageiro.nome}"></td>
+            <td th:text="${r.voo.descricao}"></td>
+            <td th:text="${r.voo.horario != null} ? ${#temporals.format(r.voo.horario, 'dd/MM/yyyy HH:mm')} : ''"></td>
+            <td th:text="${r.tarifa != null} ? 'R$ ' + ${#numbers.formatDecimal(r.tarifa, 1, 'POINT', 2, 'COMMA')} : ''"></td>
+            <td th:text="${r.qtdBagagens}"></td>
+            <td th:text="${r.status}"></td>
+            <td class="acoes">
+                <a class="btn pequeno" th:href="@{/reservas/editar/{id}(id=${r.codReserva})}">Editar</a>
+                <form th:action="@{/reservas/excluir/{id}(id=${r.codReserva})}" method="post"
+                      onsubmit="return confirm('Excluir esta reserva?')">
+                    <button class="btn pequeno perigo" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(reservas)}">
+            <td colspan="9" class="vazio">Nenhuma reserva cadastrada.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

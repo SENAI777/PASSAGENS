@@ -1,0 +1,50 @@
+# Porta: a hospedagem (Render, Railway...) informa pela variável PORT; localmente usa 8080
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: Aplicacao_Reservas
+
+  # Lê as variáveis do arquivo .env na pasta do projeto (se existir).
+  # Variáveis de ambiente do sistema têm prioridade sobre o .env.
+  config:
+    import: optional:file:.env[.properties]
+
+  # Banco MySQL. createDatabaseIfNotExist=true: em um PC novo o banco PASSAGENS é criado sozinho.
+  # Em outro PC, troque usuário/senha aqui ou pelas variáveis DB_USER / DB_PASSWORD.
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/PASSAGENS?createDatabaseIfNotExist=true}
+    username: ${DB_USER:admin}
+    password: ${DB_PASSWORD:}
+
+  # Migrations: os scripts em src/main/resources/db/migration criam/atualizam as tabelas
+  # automaticamente ao iniciar a aplicação (tabela de controle: flyway_schema_history).
+  flyway:
+    enabled: true
+    baseline-on-migrate: true   # banco que já tinha as tabelas (este PC): marca a V1 como já aplicada
+    baseline-version: 1
+
+  jpa:
+    hibernate:
+      ddl-auto: none   # quem cria as tabelas é o Flyway; o Hibernate NÃO cria nem altera nada
+    open-in-view: false
+    show-sql: true     # mostra no console os SQL executados (bom para estudar)
+
+  # Envio de e-mail (exemplo com Gmail).
+  # Defina as variáveis de ambiente MAIL_USERNAME e MAIL_PASSWORD antes de rodar.
+  # No Gmail a senha deve ser uma "Senha de app" (Conta Google > Segurança > Senhas de app).
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000

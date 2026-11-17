@@ -1,0 +1,14 @@
+# Configuração usada SÓ nos testes: banco H2 em memória (não precisa do MySQL)
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  flyway:
+    enabled: false            # a migration usa SQL do MySQL; nos testes o Hibernate cria as tabelas no H2
+  jpa:
+    hibernate:
+      ddl-auto: create-drop   # nos testes o Hibernate cria as tabelas a partir das entidades
+    open-in-view: false
+  mail:
+    host: localhost   # nenhum e-mail é enviado de verdade nos testes

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Voo')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <h1 th:text="${voo.codVoo == null} ? 'Novo voo' : 'Editar voo'"></h1>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <form class="formulario" th:action="@{/voos/salvar}" th:object="${voo}" method="post">
+        <input type="hidden" th:field="*{codVoo}">
+
+        <label>Origem
+            <input type="text" th:field="*{origem}" required>
+        </label>
+
+        <label>Destino
+            <input type="text" th:field="*{destino}" required>
+        </label>
+
+        <label>Horário
+            <input type="datetime-local" th:field="*{horario}" required>
+        </label>
+
+        <label>Modelo do avião
+            <input type="text" th:field="*{modeloAviao}" placeholder="Ex.: Airbus A320" required>
+        </label>
+
+        <div class="botoes">
+            <button class="btn" type="submit">Salvar</button>
+            <a class="btn secundario" th:href="@{/voos}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body style="font-family: Arial, sans-serif; color: #222; background: #f3f5f9; padding: 20px;">
+<div style="max-width: 560px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden;">
+
+    <div style="background: #1e3a8a; color: #fff; padding: 16px 24px; font-size: 20px; font-weight: bold;">
+        ✈ Reservas de Voo
+    </div>
+
+    <div style="padding: 24px;">
+        <p>Olá, <strong th:text="${reserva.passageiro.nome}">Passageiro</strong>!</p>
+        <p>Sua reserva foi <strong style="color: #166534;">confirmada</strong>. Confira os dados:</p>
+
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 6px 0; color: #555;">Localizador</td>
+                <td style="padding: 6px 0; font-weight: bold; font-size: 18px;" th:text="${reserva.localizador}"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 0; color: #555;">Status</td>
+                <td style="padding: 6px 0;" th:text="${reserva.status}"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 0; color: #555;">Voo</td>
+                <td style="padding: 6px 0;" th:text="${reserva.voo.descricao}"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 0; color: #555;">Data / horário</td>
+                <td style="padding: 6px 0;"
+                    th:text="${reserva.voo.horario != null} ? ${#temporals.format(reserva.voo.horario, 'dd/MM/yyyy HH:mm')} : '-'"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 0; color: #555;">Avião</td>
+                <td style="padding: 6px 0;" th:text="${reserva.voo.modeloAviao}"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 0; color: #555;">Tarifa</td>
+                <td style="padding: 6px 0;"
+                    th:text="${reserva.tarifa != null} ? 'R$ ' + ${#numbers.formatDecimal(reserva.tarifa, 1, 'POINT', 2, 'COMMA')} : '-'"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 0; color: #555;">Bagagens</td>
+                <td style="padding: 6px 0;" th:text="${reserva.qtdBagagens}"></td>
+            </tr>
+        </table>
+
+        <p style="margin-top: 24px;">Boa viagem!</p>
+    </div>
+</div>
+</body>
+</html>

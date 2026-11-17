@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Passageiro')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <h1 th:text="${passageiro.codPassageiro == null} ? 'Novo passageiro' : 'Editar passageiro'"></h1>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <form class="formulario" th:action="@{/passageiros/salvar}" th:object="${passageiro}" method="post">
+        <input type="hidden" th:field="*{codPassageiro}">
+
+        <label>Nome
+            <input type="text" th:field="*{nome}" required>
+        </label>
+
+        <label>CPF
+            <input type="text" th:field="*{cpf}" placeholder="000.000.000-00" maxlength="14" required>
+        </label>
+
+        <label>Idade
+            <input type="number" th:field="*{idade}" min="0" max="130" required>
+        </label>
+
+        <label>E-mail
+            <input type="email" th:field="*{email}" required>
+        </label>
+
+        <div class="botoes">
+            <button class="btn" type="submit">Salvar</button>
+            <a class="btn secundario" th:href="@{/passageiros}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
