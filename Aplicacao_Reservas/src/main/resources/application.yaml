@@ -10,16 +10,10 @@ spring:
   # Variáveis de ambiente do sistema têm prioridade sobre o .env.
   config:
     import: optional:file:.env[.properties]
-
-  # Banco MySQL. createDatabaseIfNotExist=true: em um PC novo o banco PASSAGENS é criado sozinho.
-  # Em outro PC, troque usuário/senha aqui ou pelas variáveis DB_USER / DB_PASSWORD.
   datasource:
-    #url: ${DB_URL:jdbc:mysql://localhost:3306/PASSAGENS?createDatabaseIfNotExist=true}
-    #username: ${DB_USER:admin}
-    #password: ${DB_PASSWORD:}
-    url: jdbc:mysql://77.113.45.160:3306/PASSAGENS?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
-    username: JAVA
-    password: Java@123
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   # Migrations: os scripts em src/main/resources/db/migration criam/atualizam as tabelas
   # automaticamente ao iniciar a aplicação (tabela de controle: flyway_schema_history).
