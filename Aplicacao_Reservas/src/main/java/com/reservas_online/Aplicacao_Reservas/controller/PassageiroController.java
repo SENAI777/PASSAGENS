@@ -10,25 +10,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.reservas_online.Aplicacao_Reservas.model.Passageiro;
-import com.reservas_online.Aplicacao_Reservas.repository.PassageiroRepository;
-import com.reservas_online.Aplicacao_Reservas.repository.ReservaRepository;
+import com.reservas_online.Aplicacao_Reservas.service.PassageiroService;
+import com.reservas_online.Aplicacao_Reservas.service.PassageiroService.ResultadoSalvar;
 
 @Controller
 @RequestMapping("/passageiros")
 public class PassageiroController {
 
-    private final PassageiroRepository passageiroRepository;
-    private final ReservaRepository reservaRepository;
+    private final PassageiroService passageiroService;
 
-    public PassageiroController(PassageiroRepository passageiroRepository, ReservaRepository reservaRepository) {
-        this.passageiroRepository = passageiroRepository;
-        this.reservaRepository = reservaRepository;
+    public PassageiroController(PassageiroService passageiroService) {
+        this.passageiroService = passageiroService;
     }
 
     // READ - lista todos
     @GetMapping
     public String listar(Model model) {
-        model.addAttribute("passageiros", passageiroRepository.findAll());
+        model.addAttribute("passageiros", passageiroService.listar());
         return "passageiros/lista";
     }
 
@@ -42,7 +40,7 @@ public class PassageiroController {
     // UPDATE - abre formulário preenchido
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model, RedirectAttributes ra) {
-        return passageiroRepository.findById(id)
+        return passageiroService.buscarPorId(id)
                 .map(p -> {
                     model.addAttribute("passageiro", p);
                     return "passageiros/form";
@@ -56,23 +54,14 @@ public class PassageiroController {
     // CREATE / UPDATE - salva
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute Passageiro passageiro, Model model, RedirectAttributes ra) {
-        // CPF e e-mail são UNIQUE no banco: avisamos antes de tentar gravar
-        Long id = passageiro.getCodPassageiro();
-        boolean cpfRepetido = id == null
-                ? passageiroRepository.existsByCpf(passageiro.getCpf())
-                : passageiroRepository.existsByCpfAndCodPassageiroNot(passageiro.getCpf(), id);
-        boolean emailRepetido = id == null
-                ? passageiroRepository.existsByEmail(passageiro.getEmail())
-                : passageiroRepository.existsByEmailAndCodPassageiroNot(passageiro.getEmail(), id);
-
-        if (cpfRepetido || emailRepetido) {
-            model.addAttribute("erro", cpfRepetido
+        ResultadoSalvar resultado = passageiroService.salvar(passageiro);
+        if (resultado == ResultadoSalvar.CPF_DUPLICADO || resultado == ResultadoSalvar.EMAIL_DUPLICADO) {
+            model.addAttribute("erro", resultado == ResultadoSalvar.CPF_DUPLICADO
                     ? "Já existe um passageiro com este CPF."
                     : "Já existe um passageiro com este e-mail.");
             return "passageiros/form";
         }
 
-        passageiroRepository.save(passageiro);
         ra.addFlashAttribute("sucesso", "Passageiro salvo com sucesso.");
         return "redirect:/passageiros";
     }
@@ -80,10 +69,9 @@ public class PassageiroController {
     // DELETE
     @PostMapping("/excluir/{id}")
     public String excluir(@PathVariable Long id, RedirectAttributes ra) {
-        if (reservaRepository.existsByPassageiroCodPassageiro(id)) {
+        if (!passageiroService.excluir(id)) {
             ra.addFlashAttribute("erro", "Não é possível excluir: o passageiro possui reservas.");
         } else {
-            passageiroRepository.deleteById(id);
             ra.addFlashAttribute("sucesso", "Passageiro excluído.");
         }
         return "redirect:/passageiros";

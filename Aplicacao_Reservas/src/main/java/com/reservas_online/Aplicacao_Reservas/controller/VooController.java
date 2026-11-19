@@ -1,9 +1,5 @@
 package com.reservas_online.Aplicacao_Reservas.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,31 +10,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.reservas_online.Aplicacao_Reservas.model.Voo;
-import com.reservas_online.Aplicacao_Reservas.repository.ReservaRepository;
-import com.reservas_online.Aplicacao_Reservas.repository.VooRepository;
+import com.reservas_online.Aplicacao_Reservas.service.VooService;
+import com.reservas_online.Aplicacao_Reservas.service.VooService.ResultadoSalvar;
 
 @Controller
 @RequestMapping("/voos")
 public class VooController {
 
-    private final VooRepository vooRepository;
-    private final ReservaRepository reservaRepository;
+    private final VooService vooService;
 
-    public VooController(VooRepository vooRepository, ReservaRepository reservaRepository) {
-        this.vooRepository = vooRepository;
-        this.reservaRepository = reservaRepository;
+    public VooController(VooService vooService) {
+        this.vooService = vooService;
     }
 
     @GetMapping
     public String listar(Model model) {
-        List<Voo> voos = vooRepository.findAll();
-        // quantidade de reservas de cada voo (um voo tem várias reservas)
-        Map<Long, Long> qtdReservas = new HashMap<>();
-        for (Voo v : voos) {
-            qtdReservas.put(v.getCodVoo(), reservaRepository.countByVooCodVoo(v.getCodVoo()));
-        }
-        model.addAttribute("voos", voos);
-        model.addAttribute("qtdReservas", qtdReservas);
+        VooService.DadosListagem listagem = vooService.listar();
+        model.addAttribute("voos", listagem.voos());
+        model.addAttribute("qtdReservas", listagem.qtdReservas());
         return "voos/lista";
     }
 
@@ -50,7 +39,7 @@ public class VooController {
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model, RedirectAttributes ra) {
-        return vooRepository.findById(id)
+        return vooService.buscarPorId(id)
                 .map(v -> {
                     model.addAttribute("voo", v);
                     return "voos/form";
@@ -63,23 +52,19 @@ public class VooController {
 
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute Voo voo, Model model, RedirectAttributes ra) {
-        // O banco tem CHECK (origem <> destino)
-        if (voo.getOrigem() != null && voo.getOrigem().trim().equalsIgnoreCase(
-                voo.getDestino() == null ? "" : voo.getDestino().trim())) {
+        if (vooService.salvar(voo) == ResultadoSalvar.ORIGEM_E_DESTINO_IGUAIS) {
             model.addAttribute("erro", "A origem e o destino precisam ser diferentes.");
             return "voos/form";
         }
-        vooRepository.save(voo);
         ra.addFlashAttribute("sucesso", "Voo salvo com sucesso.");
         return "redirect:/voos";
     }
 
     @PostMapping("/excluir/{id}")
     public String excluir(@PathVariable Long id, RedirectAttributes ra) {
-        if (reservaRepository.existsByVooCodVoo(id)) {
+        if (!vooService.excluir(id)) {
             ra.addFlashAttribute("erro", "Não é possível excluir: o voo possui reservas.");
         } else {
-            vooRepository.deleteById(id);
             ra.addFlashAttribute("sucesso", "Voo excluído.");
         }
         return "redirect:/voos";
