@@ -1,0 +1,13 @@
+-- Execute este script no MySQL como administrador (Workbench).
+
+CREATE DATABASE IF NOT EXISTS `PASSAGENS`
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_0900_ai_ci;
+
+CREATE USER IF NOT EXISTS 'JAVA'@'localhost' IDENTIFIED BY '';
+ALTER USER 'JAVA'@'localhost' IDENTIFIED BY '';
+
+GRANT ALL PRIVILEGES ON `PASSAGENS`.* TO 'JAVA'@'localhost';
+FLUSH PRIVILEGES;
+
+SHOW GRANTS FOR 'JAVA'@'localhost';

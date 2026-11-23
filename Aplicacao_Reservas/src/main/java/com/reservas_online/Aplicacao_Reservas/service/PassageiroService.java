@@ -33,6 +33,7 @@ public class PassageiroService {
 
     @Transactional
     public ResultadoSalvar salvar(Passageiro passageiro) {
+        passageiro.setCpf(normalizarCpf(passageiro.getCpf()));
         Long id = passageiro.getCodPassageiro();
         boolean cpfRepetido = id == null
                 ? passageiroRepository.existsByCpf(passageiro.getCpf())
@@ -60,6 +61,10 @@ public class PassageiroService {
 
         passageiroRepository.deleteById(id);
         return true;
+    }
+
+    public static String normalizarCpf(String cpf) {
+        return cpf == null ? null : cpf.replaceAll("[^0-9]", "");
     }
 
     public enum ResultadoSalvar {

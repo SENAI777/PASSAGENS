@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Usuários')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <div class="topo">
+        <h1>Usuários</h1>
+        <a class="btn" th:href="@{/usuarios/novo}">Novo usuário</a>
+    </div>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.nome == null} ? 'Administrador' : ${usuario.nome}"></td>
+                <td th:text="${usuario.cpf == null} ? '-' : ${usuario.cpf}"></td>
+                <td class="acoes">
+                    <a class="btn pequeno" th:if="${usuario.usuario != 'admin'}"
+                       th:href="@{/usuarios/editar/{id}(id=${usuario.id})}">Editar</a>
+                    <form th:if="${usuario.usuario != 'admin'}"
+                          th:action="@{/usuarios/excluir/{id}(id=${usuario.id})}" method="post">
+                        <button class="btn pequeno perigo" type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

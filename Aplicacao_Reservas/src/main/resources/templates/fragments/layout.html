@@ -14,6 +14,9 @@
         <a th:href="@{/passageiros}">Passageiros</a>
         <a th:href="@{/voos}">Voos</a>
         <a th:href="@{/reservas}">Reservas</a>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button class="btn logout-botao" type="submit">Sair</button>
+        </form>
     </nav>
 </header>
 

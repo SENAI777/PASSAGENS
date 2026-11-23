@@ -17,7 +17,8 @@
         </label>
 
         <label>CPF
-            <input type="text" th:field="*{cpf}" placeholder="000.000.000-00" maxlength="14" required>
+            <input id="cpf" type="text" th:field="*{cpf}" placeholder="000.000.000-00"
+                   maxlength="14" inputmode="numeric" required>
         </label>
 
         <label>Idade
@@ -34,5 +35,23 @@
         </div>
     </form>
 </main>
+<script>
+    const campoCpf = document.getElementById('cpf');
+
+    function aplicarMascaraCpf(cpf) {
+        return cpf
+            .replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+            .slice(0, 14);
+    }
+
+    campoCpf.addEventListener('input', () => {
+        campoCpf.value = aplicarMascaraCpf(campoCpf.value);
+    });
+
+    campoCpf.value = aplicarMascaraCpf(campoCpf.value);
+</script>
 </body>
 </html>
