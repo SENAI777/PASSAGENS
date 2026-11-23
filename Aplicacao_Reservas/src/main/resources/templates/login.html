@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Login')}"></head>
+<body class="login-pagina">
+<main class="login-container">
+    <form class="login-formulario" th:action="@{/login}" method="post">
+        <h1>Reservas de Voo</h1>
+
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <label>
+            Usuário
+            <input type="text" name="usuario" autocomplete="username" required>
+        </label>
+
+        <label>
+            Senha
+            <input type="password" name="senha" autocomplete="current-password" required>
+        </label>
+
+        <button class="btn login-botao" type="submit">Entrar</button>
+    </form>
+</main>
+</body>
+</html>
