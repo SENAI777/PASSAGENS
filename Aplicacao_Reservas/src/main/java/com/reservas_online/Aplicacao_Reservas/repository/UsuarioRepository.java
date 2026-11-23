@@ -8,4 +8,10 @@ import com.reservas_online.Aplicacao_Reservas.model.Usuario;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByUsuarioAndSenha(String usuario, String senha);
+
+    Optional<Usuario> findByCpfAndSenha(String cpf, String senha);
+
+    boolean existsByCpf(String cpf);
+
+    boolean existsByCpfAndIdNot(String cpf, Long id);
 }

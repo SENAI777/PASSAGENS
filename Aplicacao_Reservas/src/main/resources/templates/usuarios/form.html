@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Usuário')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: menu}"></header>
+
+<main class="container">
+    <h1 th:text="${usuario.id == null} ? 'Novo usuário' : 'Editar usuário'"></h1>
+
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <form class="formulario" th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <label>Nome
+            <input type="text" th:field="*{nome}" maxlength="100" required>
+        </label>
+
+        <label>CPF
+            <input id="cpf" type="text" th:field="*{cpf}" placeholder="000.000.000-00"
+                   maxlength="14" inputmode="numeric" required>
+        </label>
+
+        <label>Senha
+            <input type="password" th:field="*{senha}" maxlength="100" required>
+        </label>
+
+        <div class="botoes">
+            <button class="btn" type="submit">Salvar</button>
+            <a class="btn secundario" th:href="@{/usuarios}">Cancelar</a>
+        </div>
+    </form>
+</main>
+<script>
+    const campoCpf = document.getElementById('cpf');
+
+    function aplicarMascaraCpf(cpf) {
+        return cpf
+            .replace(/\D/g, '')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d)/, '$1.$2')
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+            .slice(0, 14);
+    }
+
+    campoCpf.addEventListener('input', () => {
+        campoCpf.value = aplicarMascaraCpf(campoCpf.value);
+    });
+
+    campoCpf.value = aplicarMascaraCpf(campoCpf.value);
+</script>
+</body>
+</html>

@@ -9,8 +9,9 @@
         <div th:replace="~{fragments/layout :: mensagens}"></div>
 
         <label>
-            Usuário
-            <input type="text" name="usuario" autocomplete="username" required>
+            Usuário ou CPF
+            <input id="usuario" type="text" name="usuario" autocomplete="username"
+                   placeholder="CPF ou usuário" maxlength="14" inputmode="text" required>
         </label>
 
         <label>
@@ -21,5 +22,19 @@
         <button class="btn login-botao" type="submit">Entrar</button>
     </form>
 </main>
+<script>
+    const campoUsuario = document.getElementById('usuario');
+
+    campoUsuario.addEventListener('input', () => {
+        if (/^\d/.test(campoUsuario.value)) {
+            campoUsuario.value = campoUsuario.value
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+                .slice(0, 14);
+        }
+    });
+</script>
 </body>
 </html>

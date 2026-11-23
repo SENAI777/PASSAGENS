@@ -21,6 +21,10 @@
             <h2>Reservas</h2>
             <p>Passageiro + voo, tarifa e bagagens</p>
         </a>
+        <a class="card" th:href="@{/usuarios}" th:if="${usuarioEhAdmin}">
+            <h2>Usuários</h2>
+            <p>Nome, CPF e senha de acesso</p>
+        </a>
     </div>
 </main>
 </body>

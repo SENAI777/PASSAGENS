@@ -17,6 +17,11 @@ public class LoginService {
     }
 
     public Optional<Usuario> autenticar(String usuario, String senha) {
-        return usuarioRepository.findByUsuarioAndSenha(usuario, senha);
+        Optional<Usuario> porUsuario = usuarioRepository.findByUsuarioAndSenha(usuario, senha);
+        if (porUsuario.isPresent()) {
+            return porUsuario;
+        }
+        String cpf = UsuarioService.normalizarCpf(usuario);
+        return usuarioRepository.findByCpfAndSenha(cpf, senha);
     }
 }

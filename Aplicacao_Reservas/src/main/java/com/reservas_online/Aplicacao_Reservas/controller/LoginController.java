@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.reservas_online.Aplicacao_Reservas.model.Usuario;
 import com.reservas_online.Aplicacao_Reservas.service.LoginService;
 
 import jakarta.servlet.http.HttpSession;
@@ -35,7 +36,9 @@ public class LoginController {
             return "redirect:/login";
         }
 
-        session.setAttribute("usuarioLogado", autenticado.get().getUsuario());
+        Usuario usuarioAutenticado = autenticado.get();
+        session.setAttribute("usuarioLogado", usuarioAutenticado.getUsuario());
+        session.setAttribute("usuarioEhAdmin", "admin".equals(usuarioAutenticado.getUsuario()));
         return "redirect:/";
     }
 

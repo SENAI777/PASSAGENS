@@ -19,6 +19,12 @@ public class Usuario {
     @Column(nullable = false, unique = true, length = 50)
     private String usuario;
 
+    @Column(length = 100)
+    private String nome;
+
+    @Column(length = 14, unique = true)
+    private String cpf;
+
     @Column(nullable = false, length = 100)
     private String senha;
 
@@ -39,6 +45,22 @@ public class Usuario {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getSenha() {
